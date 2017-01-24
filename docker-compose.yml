@@ -1,0 +1,30 @@
+version: '2.1'
+services:
+  db:
+    image: postgres:9-alpine
+    container_name: giskis-db
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+  redis:
+    image: redis:alpine
+    container_name: giskis-redis
+
+  giskis:
+    image: rainu/giskis
+    container_name: giskis
+    environment:
+      - PG_HOST=db
+      - PG_PORT=5432
+      - PG_USER=postgres
+      - PG_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SCAN_DIR=/in
+      - OUTPUT_DIR=/out
+    volumes:
+      - ./in:/in
+      - ./out:/out
+    depends_on:
+      - db
+      - redis
