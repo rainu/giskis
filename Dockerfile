@@ -1,10 +1,10 @@
-FROM alpine:3.3
+FROM openjdk:8-jre-alpine
 MAINTAINER rainu <rainu@raysha.de>
 
-RUN apk add --update bash postgresql-client redis &&\
+RUN apk add --update bash postgresql-client &&\
  rm -rf /var/cache/apk/*
 
-COPY src/giskis/giskis /bin/
-COPY docker/worker.sh /bin/
+COPY docker/wait_and_start.sh /giskis.sh
+COPY target/giskis*.jar /giskis.jar
 
-CMD ["worker.sh"]
+CMD ["/giskis.sh"]

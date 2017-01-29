@@ -6,16 +6,13 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgres
 
-  redis:
-    image: redis:alpine
-    container_name: giskis-redis
-
   giskis:
     image: rainu/giskis
     container_name: giskis
     environment:
       - PG_HOST=db
       - PG_PORT=5432
+      - PG_DATABASE=postgres
       - PG_USER=postgres
       - PG_PASSWORD=postgres
       - REDIS_HOST=redis
@@ -27,4 +24,3 @@ services:
       - ./out:/out
     depends_on:
       - db
-      - redis
