@@ -5,14 +5,13 @@ GisKis stores the information from kismet in a database so that the user can gen
 
 ```
  cd <project-root>
- export GOPATH=<project-root>/
- cd <project-root>/src/giskis/
- go get
- go build
+ mvn clean install
+ docker build -t rainu/giskis ./ 
 ```
 
 # How to execute
 After building the executable:
 ```
- $> ./giskis <path-to-kismet-netxml>.netxml
+ $> cd <project-root>
+ $project-root> docker-compose up
 ```
