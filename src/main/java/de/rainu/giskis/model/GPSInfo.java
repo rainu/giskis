@@ -1,7 +1,5 @@
 package de.rainu.giskis.model;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.*;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,6 +7,11 @@ import de.rainu.giskis.sql.DatabaseConstants;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
+
+import java.math.BigInteger;
+
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -26,7 +29,7 @@ public class GPSInfo implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = GPS_INFO_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlElement(name = "min-lat")
 	@Column(name = GPS_INFO_MIN_LAT)
@@ -84,11 +87,11 @@ public class GPSInfo implements DatabaseConstants {
 	@Column(name = GPS_INFO_AVERAGE_ALT)
 	private Double averageAlt;
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

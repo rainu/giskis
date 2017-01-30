@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import de.micromata.opengis.kml.v_2_2_0.*;
 import de.rainu.giskis.model.*;
+import org.springframework.util.StringUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -13,6 +14,9 @@ import java.util.Map;
 
 import static de.rainu.giskis.kml.SecurityLevel.*;
 
+/**
+ * This class is responsible for KML-Exporting based on a {@link DetectionRun}.
+ */
 public class KMLExporter {
 	private final DetectionRun run;
 	private final ObjectMapper mapper;
@@ -80,32 +84,46 @@ public class KMLExporter {
 				continue;
 			}
 
-			Folder folder = secureNetworkFolder;
+			Folder parentFolder = secureNetworkFolder;
 			Style style = getStyle(SECURE);
 
 			if(network.getSSID().getEncryption().stream().filter(e -> e.equals("None")).count() > 0){
-				folder = openNetworkFolder;
+				parentFolder = openNetworkFolder;
 				style = getStyle(OPEN);
 			}else if(network.getSSID().getEncryption().stream().filter(e -> e.contains("WEP")).count() > 0){
-				folder = insecureNetworkFolder;
+				parentFolder = insecureNetworkFolder;
 				style = getStyle(INSECURE);
 			}else if("configured".equalsIgnoreCase(network.getSSID().getWps())) {
-				folder = wpsNetworkFolder;
+				parentFolder = wpsNetworkFolder;
 				style = getStyle(WPS);
 			}
 
-			folder = folder.createAndAddFolder().withName(getNetworkName(network));
-			buildPlacemark(folder, style, network);
+			Folder childFolder = parentFolder.createAndAddFolder().withName(getNetworkName(network));
+			buildPlacemark(childFolder, style, network);
 
 			for(WirelessClient client : network.getWirelessClients()) {
-				buildPlacemark(folder, styleClient, client);
+				if(network.getBSSID().equals(client.getMac())) {
+					//no real client :( - let's skip this
+					continue;
+				}
+
+				buildPlacemark(childFolder, styleClient, client);
+			}
+
+			//remove empty folders
+			if(childFolder.getFeature() == null || childFolder.getFeature().isEmpty()){
+				parentFolder.getFeature().remove(childFolder);
+			} else {
+				if(childFolder.getFeature().size() > 1) {
+					childFolder.setName("[" + (childFolder.getFeature().size() - 1) + "] " + childFolder.getName());
+				}
 			}
 		}
 	}
 
 	private void buildPlacemark(Folder folder, Style style, WirelessNetwork network) {
 		final GeoPoint point = getBestPoint(network.getGPSInfo());
-		if(point == null || point.isInvalid()) {
+		if(point == null || point.isEmpty() || point.isInvalid()) {
 			return;
 		}
 
@@ -141,7 +159,7 @@ public class KMLExporter {
 
 	private void buildPlacemark(Folder folder, Style style, WirelessClient client) {
 		final GeoPoint cp = getBestPoint(client.getGPSInfo());
-		if (cp == null || cp.isInvalid()) {
+		if (cp == null || cp.isEmpty() || cp.isInvalid()) {
 			return;
 		}
 		final Coordinate clientCoord = KmlFactory.createCoordinate(cp.getLon(), cp.getLat(), cp.getAlt());
@@ -166,19 +184,19 @@ public class KMLExporter {
 	}
 
 	private GeoPoint getBestPoint(GPSInfo gpsInfo) {
-		if(!gpsInfo.getPeak().isEmpty()) {
+		if(!gpsInfo.getPeak().isEmpty() && !gpsInfo.getPeak().isInvalid()) {
 			return gpsInfo.getPeak();
 		}
 
-		if(!gpsInfo.getAverage().isEmpty()) {
+		if(!gpsInfo.getAverage().isEmpty() && !gpsInfo.getAverage().isInvalid()) {
 			return gpsInfo.getAverage();
 		}
 
-		if(!gpsInfo.getMax().isEmpty()) {
+		if(!gpsInfo.getMax().isEmpty() && !gpsInfo.getMax().isInvalid()) {
 			return gpsInfo.getMax();
 		}
 
-		if(!gpsInfo.getMin().isEmpty()) {
+		if(!gpsInfo.getMin().isEmpty() && !gpsInfo.getMin().isInvalid()) {
 			return gpsInfo.getMin();
 		}
 

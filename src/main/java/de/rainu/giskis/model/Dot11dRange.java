@@ -8,6 +8,8 @@ import de.rainu.giskis.sql.DatabaseConstants;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import java.math.BigInteger;
+
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
@@ -27,7 +29,7 @@ public class Dot11dRange implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = DOT11D_RANGE_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlAttribute(name = "start")
 	@Column(name = DOT11D_RANGE_START)
@@ -41,11 +43,11 @@ public class Dot11dRange implements DatabaseConstants {
 	@Column(name = DOT11D_RANGE_MAX_POWER)
 	private Integer maxPower;
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

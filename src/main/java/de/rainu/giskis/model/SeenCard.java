@@ -9,6 +9,7 @@ import de.rainu.giskis.sql.DatabaseConstants;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -30,7 +31,7 @@ public class SeenCard implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = SEEN_CARD_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlElement(name = "seen-uuid")
 	@Column(name = SEEN_CARD_UUID)
@@ -45,11 +46,11 @@ public class SeenCard implements DatabaseConstants {
 	@Column(name = SEEN_CARD_PACKETS)
 	private Integer packets;
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

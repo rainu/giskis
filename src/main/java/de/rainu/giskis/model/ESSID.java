@@ -8,6 +8,8 @@ import de.rainu.giskis.sql.DatabaseConstants;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import java.math.BigInteger;
+
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
@@ -26,7 +28,7 @@ public class ESSID implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = ESSID_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlValue
 	@Column(name = ESSID_ESSID)
@@ -36,11 +38,11 @@ public class ESSID implements DatabaseConstants {
 	@Column(name = ESSID_ESSID_CLOAKED)
 	private Boolean cloaked;
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

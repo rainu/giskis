@@ -1,6 +1,5 @@
 package de.rainu.giskis.netxml;
 
-import de.rainu.giskis.executer.KismetFileReceiver;
 import de.rainu.giskis.model.DetectionRun;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +20,11 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.function.Function;
 
+/**
+ * This class is responsible for parsing kismet files.
+ */
 @Component
-public class KismetParser implements Function<Path, DetectionRun> {
-	private final static Logger LOG = LoggerFactory.getLogger(KismetParser.class);
-
+public class KismetParser {
 	private JAXBContext jaxbContext;
 	private XMLReader xmlReader;
 
@@ -37,18 +37,11 @@ public class KismetParser implements Function<Path, DetectionRun> {
 		xmlReader = spf.newSAXParser().getXMLReader();
 	}
 
-	@Override
-	public DetectionRun apply(Path path) {
-		try {
-			return parseNetxml(path.toFile());
-		} catch (Exception e) {
-			LOG.error("Could not parse as kismet netxml!", e);
-			return null;
-		}
-	}
-
-	public DetectionRun parseNetxml(File netxmlFile) throws FileNotFoundException, JAXBException {
-		InputSource inputSource = new InputSource(new FileReader(netxmlFile));
+	/**
+	 * Parse Kismet file and return the {@link DetectionRun} model.
+	 */
+	public DetectionRun parse(File kismetFile) throws FileNotFoundException, JAXBException {
+		InputSource inputSource = new InputSource(new FileReader(kismetFile));
 		SAXSource source = new SAXSource(xmlReader, inputSource);
 
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();

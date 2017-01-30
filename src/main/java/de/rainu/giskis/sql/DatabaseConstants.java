@@ -1,5 +1,8 @@
 package de.rainu.giskis.sql;
 
+/**
+ * This interface contains all table- and column names from the used database.
+ */
 public interface DatabaseConstants {
 	String DETECTION_RUN = "detection_run";
 	String DETECTION_RUN_ID = "id";
@@ -28,7 +31,6 @@ public interface DatabaseConstants {
 	String WIRELESS_NETWORK_BSSID = "bssid";
 	String WIRELESS_NETWORK_MANUF = "manuf";
 	String WIRELESS_NETWORK_CHANNEL = "channel";
-	String WIRELESS_NETWORK_FREQ_MHZ = "freq";
 	String WIRELESS_NETWORK_MAX_SEEN_RATE = "max_seen_rate";
 	String WIRELESS_NETWORK_PACKETS = "packets";
 	String WIRELESS_NETWORK_DATASIZE = "datasize";
@@ -42,17 +44,6 @@ public interface DatabaseConstants {
 	String WIRELESS_NETWORK_SEEN_CARD = "seen_card";
 	String WIRELESS_NETWORK_DETECTION_RUN = "detection_run_ref";
 
-	String CARRIER = "carrier";
-	String CARRIER_ID = "id";
-	String CARRIER_VALUE = "value";
-	String CARRIER_NETWORK_REF = "wireless_network_ref";
-	String CARRIER_CLIENT_REF = "wireless_client_ref";
-
-	String ENCODING = "encoding";
-	String ENCODING_ID = "id";
-	String ENCODING_VALUE = "value";
-	String ENCODING_NETWORK_REF = "wireless_network_ref";
-	String ENCODING_CLIENT_REF = "wireless_client_ref";
 
 	String SSID = "ssid";
 	String SSID_ID = "id";
@@ -68,7 +59,6 @@ public interface DatabaseConstants {
 	String SSID_MODEL_NAME = "model_name";
 	String SSID_MODEL_NUMBER = "model_number";
 	String SSID_WPA_VERSION = "wpa_version";
-	String SSID_ENCRYPTION = "encryption";
 	String SSID_DOT11D = "dot11d";
 	String SSID_SSID = "ssid";
 	String SSID_INFO = "info";
@@ -114,12 +104,6 @@ public interface DatabaseConstants {
 	String SNR_INFO_MAX_NOISE_DBM = "max_noise_dbm";
 	String SNR_INFO_MAX_SIGNAL_RSSI = "max_signal_rssi";
 	String SNR_INFO_MAX_NOISE_RSSI = "max_noise_rssi";
-
-	String GIS_POINT = "gis_point";
-	String GIS_POINT_ID = "id";
-	String GIS_POINT_LON = "longitude";
-	String GIS_POINT_LAT = "latitude";
-	String GIS_POINT_ALT = "altitude";
 
 	String GPS_INFO = "gps_info";
 	String GPS_INFO_ID = "id";
@@ -168,7 +152,6 @@ public interface DatabaseConstants {
 	String WIRELESS_CLIENT_MANUF = "manuf";
 	String WIRELESS_CLIENT_SSID = "ssid";
 	String WIRELESS_CLIENT_CHANNEL = "channel";
-	String WIRELESS_CLIENT_FREQ_MHZ = "freq";
 	String WIRELESS_CLIENT_MAX_SEEN_RATE = "max_seen_rate";
 	String WIRELESS_CLIENT_PACKETS = "packets";
 	String WIRELESS_CLIENT_DATASIZE = "datasize";

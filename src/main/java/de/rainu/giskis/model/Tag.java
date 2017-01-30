@@ -8,6 +8,8 @@ import de.rainu.giskis.sql.DatabaseConstants;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import java.math.BigInteger;
+
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
@@ -26,7 +28,7 @@ public class Tag implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = TAG_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlValue
 	@Column(name = TAG_VALUE)
@@ -36,11 +38,11 @@ public class Tag implements DatabaseConstants {
 	@Column(name = TAG_NAME)
 	private String name;
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

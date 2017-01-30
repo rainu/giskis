@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.rainu.giskis.netxml.KismetTimeAdapter;
 import de.rainu.giskis.sql.DatabaseConstants;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,9 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @Entity(name = DatabaseConstants.WIRELESS_CLIENT)
 @Access(AccessType.FIELD)
+@Table(indexes = {
+		  @Index(columnList = DatabaseConstants.WIRELESS_CLIENT_MAC)
+})
 public class WirelessClient implements DatabaseConstants {
 	static final WirelessClient EMPTY = new WirelessClient();
 
@@ -33,7 +39,7 @@ public class WirelessClient implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = WIRELESS_CLIENT_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlAttribute(name = "number")
 	@Column(name = WIRELESS_CLIENT_NUMBER)
@@ -62,8 +68,9 @@ public class WirelessClient implements DatabaseConstants {
 	private String manuf;
 
 	@XmlElement(name = "SSID")
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = WIRELESS_CLIENT_SSID)
+	@Fetch(FetchMode.SELECT)
 	private SSID SSID;
 
 	@XmlElement(name = "channel")
@@ -71,7 +78,8 @@ public class WirelessClient implements DatabaseConstants {
 	private Integer channel;
 
 	@XmlElement(name = "freqmhz")
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	private List<String> freqMHZ = new ArrayList<>();
 
 	@XmlElement(name = "maxseenrate")
@@ -79,16 +87,19 @@ public class WirelessClient implements DatabaseConstants {
 	private Long maxSeenRate;
 
 	@XmlElement(name = "carrier")
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	private List<String> carrier = new ArrayList<>();
 
 	@XmlElement(name = "encoding")
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	private List<String> encoding = new ArrayList<>();
 
 	@XmlElement(name = "packets")
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = WIRELESS_CLIENT_PACKETS)
+	@Fetch(FetchMode.SELECT)
 	private Packets packets;
 
 	@XmlElement(name = "datasize")
@@ -96,18 +107,21 @@ public class WirelessClient implements DatabaseConstants {
 	private Long datasize;
 
 	@XmlElement(name = "snr-info")
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = WIRELESS_CLIENT_SNR_INFO)
+	@Fetch(FetchMode.SELECT)
 	private SNRInfo SNRInfo;
 
 	@XmlElement(name = "gps-info")
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = WIRELESS_CLIENT_GPS_INFO)
+	@Fetch(FetchMode.SELECT)
 	private GPSInfo GPSInfo;
 
 	@XmlElement(name = "ip-address")
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = WIRELESS_CLIENT_IP_ADDRESS)
+	@Fetch(FetchMode.SELECT)
 	private IPAddress IPAddress;
 
 	@XmlElement(name = "cdp-device")
@@ -127,20 +141,22 @@ public class WirelessClient implements DatabaseConstants {
 	private String DHCPVendor;
 
 	@XmlElement(name = "seen-card")
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = WIRELESS_CLIENT_SEEN_CARD)
+	@Fetch(FetchMode.SELECT)
 	private SeenCard seenCard;
 
 	@XmlElement(name = "tag")
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = TAG_CLIENT_REF)
+	@Fetch(FetchMode.SELECT)
 	private List<Tag> tag = new ArrayList<>();
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

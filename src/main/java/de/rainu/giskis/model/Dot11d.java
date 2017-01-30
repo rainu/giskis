@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.rainu.giskis.sql.DatabaseConstants;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,22 +32,23 @@ public class Dot11d implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = DOT11D_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlAttribute(name = "country")
 	@Column(name = DOT11D_COUNTRY)
 	private String country;
 
 	@XmlElement(name = "dot11d-range")
-	@ElementCollection
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = DOT11D_RANGE_DOT11D)
+	@Fetch(FetchMode.SELECT)
 	private List<Dot11dRange> ranges = new ArrayList<>();
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

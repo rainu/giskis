@@ -8,6 +8,8 @@ import de.rainu.giskis.sql.DatabaseConstants;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import java.math.BigInteger;
+
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
@@ -19,6 +21,9 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @Entity(name = DatabaseConstants.CARD_SOURCE)
 @Access(AccessType.FIELD)
+@Table(indexes = {
+		  @Index(columnList = DatabaseConstants.CARD_SOURCE_UUID)
+})
 public class CardSource implements DatabaseConstants {
 	static final CardSource EMPTY = new CardSource();
 
@@ -27,7 +32,7 @@ public class CardSource implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = CARD_SOURCE_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlAttribute(name = "uuid")
 	@Column(name = CARD_SOURCE_UUID)
@@ -61,11 +66,11 @@ public class CardSource implements DatabaseConstants {
 	@Column(name = CARD_SOURCE_CHANNELS)
 	private String channels;
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

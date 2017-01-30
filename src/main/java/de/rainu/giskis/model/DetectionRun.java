@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.rainu.giskis.netxml.KismetTimeAdapter;
 import de.rainu.giskis.sql.DatabaseConstants;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +36,7 @@ public class DetectionRun implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = DETECTION_RUN_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlAttribute(name = "kismet-version")
 	@Column(name = DETECTION_RUN_VERSION)
@@ -47,18 +50,20 @@ public class DetectionRun implements DatabaseConstants {
 	@XmlElement(name = "card-source")
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = DETECTION_RUN_CARD_SOURCE)
+	@Fetch(FetchMode.SELECT)
 	private CardSource cardSource;
 
 	@XmlElement(name = "wireless-network")
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = WIRELESS_NETWORK_DETECTION_RUN)
+	@Fetch(FetchMode.SELECT)
 	private List<WirelessNetwork> wirelessNetworks = new ArrayList<>();
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

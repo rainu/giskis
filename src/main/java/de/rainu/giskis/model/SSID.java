@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.rainu.giskis.netxml.KismetTimeAdapter;
 import de.rainu.giskis.sql.DatabaseConstants;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +36,7 @@ public class SSID implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = SSID_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlAttribute(name = "first-time")
 	@XmlJavaTypeAdapter(KismetTimeAdapter.class)
@@ -86,12 +89,14 @@ public class SSID implements DatabaseConstants {
 	private String wpaVersion;
 
 	@XmlElement(name = "encryption")
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	private List<String> encryption = new ArrayList<>();
 
 	@XmlElement(name = "dot11d")
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = SSID_DOT11D)
+	@Fetch(FetchMode.SELECT)
 	private Dot11d Dot11d;
 
 	@XmlElement(name = "ssid")
@@ -103,15 +108,16 @@ public class SSID implements DatabaseConstants {
 	private String info;
 
 	@XmlElement(name = "essid")
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = SSID_ESSID)
+	@Fetch(FetchMode.SELECT)
 	private ESSID ESSID;
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

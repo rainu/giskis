@@ -8,6 +8,8 @@ import de.rainu.giskis.sql.DatabaseConstants;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import java.math.BigInteger;
+
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
@@ -27,7 +29,7 @@ public class IPAddress implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = IP_ADDRESS_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlAttribute(name = "type")
 	@Column(name = IP_ADDRESS_TYPE)
@@ -45,11 +47,11 @@ public class IPAddress implements DatabaseConstants {
 	@Column(name = IP_ADDRESS_GATEWAY)
 	private String gateway;
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

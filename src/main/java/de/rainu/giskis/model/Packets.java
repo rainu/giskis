@@ -8,6 +8,8 @@ import de.rainu.giskis.sql.DatabaseConstants;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import java.math.BigInteger;
+
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
@@ -27,7 +29,7 @@ public class Packets implements DatabaseConstants {
 	@Id
 	@GeneratedValue
 	@Column(name = PACKETS_ID)
-	private Long id;
+	private BigInteger id;
 
 	@XmlElement(name = "LLC")
 	@Column(name = PACKETS_LLC)
@@ -53,11 +55,11 @@ public class Packets implements DatabaseConstants {
 	@Column(name = PACKETS_RETRIES)
 	private Integer retries;
 
-	public Long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 
