@@ -101,6 +101,19 @@ public class FileReceiver {
 		}
 
 		LOG.info("Move file to output dir: " + target);
-		path.toFile().renameTo(target);
+		if(!path.toFile().renameTo(target)) {
+			//The javadoc for File.renameTo specifically says that it may not be able to move a file between different volumes
+			try {
+				Files.move(path.toAbsolutePath(), target.toPath().toAbsolutePath(), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				try {
+					Runtime.getRuntime().exec(String.format("mv '%s' '%s'",
+							  path.toAbsolutePath(),
+							  target.toPath().toAbsolutePath()));
+				} catch (IOException e1) {
+					LOG.error("Could not move file!", e1);
+				}
+			}
+		}
 	}
 }
