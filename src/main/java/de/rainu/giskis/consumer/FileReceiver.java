@@ -23,13 +23,16 @@ public class FileReceiver {
 
 	private final File scanDir;
 	private final File outputDir;
+	private final long minFileLastModifyTime;
 
 	public FileReceiver(
 			  @Value("${SCAN_DIR}") String scanDir,
-			  @Value("${OUTPUT_DIR}") String outputDir) {
+			  @Value("${OUTPUT_DIR}") String outputDir,
+			  @Value("${MIN_FLMT:10000}") long minFileLastModifyTime) {
 
 		this.scanDir = new File(scanDir);
 		this.outputDir = new File(outputDir);
+		this.minFileLastModifyTime = minFileLastModifyTime;
 	}
 
 	/**
@@ -44,10 +47,15 @@ public class FileReceiver {
 				Files.walkFileTree(scanDir.toPath(), new SimpleFileVisitor<Path>() {
 					@Override
 					public FileVisitResult visitFile(Path curPath, BasicFileAttributes basicFileAttributes) throws IOException {
-						LOG.info("Process file: " + curPath.toString());
-						consumer.accept(curPath);
+						if(fileIsReady(basicFileAttributes)) {
+							LOG.info("Process file: " + curPath.toString());
+							consumer.accept(curPath);
 
-						moveFile(curPath);
+							moveFile(curPath);
+						}else {
+							LOG.info("File is not ready yet: " + curPath.toString());
+						}
+
 						return FileVisitResult.CONTINUE;
 					}
 				});
@@ -63,6 +71,13 @@ public class FileReceiver {
 				return;
 			}
 		}
+	}
+
+	private boolean fileIsReady(BasicFileAttributes attributes) {
+		long diff = System.currentTimeMillis() - attributes.lastModifiedTime().toMillis();
+
+		//the file has to be unmodified since at least X-seconds
+		return diff >= minFileLastModifyTime;
 	}
 
 	private void removeEmptyDirectories(File dir) {

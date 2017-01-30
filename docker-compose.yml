@@ -17,6 +17,7 @@ services:
       - PG_PASSWORD=postgres
       - SCAN_DIR=/in
       - OUTPUT_DIR=/out
+      - MIN_FLMT=10000
     volumes:
       - ./in:/in
       - ./out:/out
