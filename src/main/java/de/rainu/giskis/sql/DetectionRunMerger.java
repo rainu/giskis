@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -23,13 +24,19 @@ public class DetectionRunMerger {
 	private WirelessClientRepository clientRepository;
 
 	public DetectionRun buildFullDetectionRun(){
+		return buildDetectionRun(() ->
+			networkRepository.findBestWirelessNetworkIds().parallelStream()
+					  .map(id -> networkRepository.findOne(id))
+					  .collect(Collectors.toList())
+		);
+	}
+
+	public DetectionRun buildDetectionRun(Supplier<List<WirelessNetwork>> networkSupplier) {
 		final DetectionRun run = new DetectionRun();
 		run.setTime(detectionRepository.getLastRunTime());
 		run.setKismetVersion("COMPLETE");
 
-		final List<WirelessNetwork> networks = networkRepository.findBestWirelessNetworkIds().parallelStream()
-				  .map(id -> networkRepository.findOne(id))
-				  .collect(Collectors.toList());
+		final List<WirelessNetwork> networks = networkSupplier.get();
 		run.setWirelessNetworks(networks);
 
 		for (int i = 0; i < networks.size(); i++) {

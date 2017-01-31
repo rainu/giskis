@@ -38,6 +38,16 @@ schema: **&lt;current ISO-Date&gt;.kml** The content of the file will be ignored
 ```bash
 touch <in-dir>/merge.kml
 ```
+
+## essid.kml
+
+If GisKis found a **essid.kml** file inside the input directory, a kml file included with only networks with
+the given essid will be generated. It will be placed into the output directory named like the following 
+schema: **&lt;ESSID&gt;-&lt;current ISO-Date&gt;.kml** The content of the file must contains the requested **essid**.
+
+```bash
+echo "ESSID" > IN_DIR/essid.kml
+```
  
 ## all other files
 

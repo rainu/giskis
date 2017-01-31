@@ -20,6 +20,9 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @Entity(name = DatabaseConstants.ESSID)
 @Access(AccessType.FIELD)
+@Table(indexes = {
+		  @Index(columnList = DatabaseConstants.ESSID_ESSID)
+})
 public class ESSID implements DatabaseConstants {
 	static final ESSID EMPTY = new ESSID();
 

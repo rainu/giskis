@@ -37,4 +37,30 @@ public interface WirelessNetworkRepository extends CrudRepository<WirelessNetwor
 			  ")",
 		nativeQuery = true)
 	List<BigInteger> findBestWirelessNetworkIds();
+
+	/**
+	 * Get a list of {@link WirelessNetwork}s which have the given ESSID. The {@link WirelessNetwork} of the
+	 * strongest detected signal will be returned.
+	 *
+	 * @param essid The requested essid.
+	 * @return A list of found {@link WirelessNetwork}s
+	 */
+	@Query(value = "SELECT wn.* FROM " + WIRELESS_NETWORK + " AS wn " +
+			  " JOIN " + SSID + " ssid on ssid." + SSID_ID + " = wn." + WIRELESS_NETWORK_SSID +
+			  " JOIN " + ESSID + " essid on essid." + ESSID_ID + " = ssid." + SSID_ESSID +
+			  " WHERE essid." + ESSID_ESSID + " = ?1 AND wn." + WIRELESS_NETWORK_ID + " = (" +
+			  "  SELECT wn_sub." + WIRELESS_NETWORK_ID +
+			  "  FROM " + WIRELESS_NETWORK + " AS wn_sub" +
+			  "  LEFT JOIN " + SNR_INFO + " snr ON wn_sub." + WIRELESS_NETWORK_SNR_INFO + " = snr." + SNR_INFO_ID +
+			  "  JOIN " + GPS_INFO + " gps ON wn_sub." + WIRELESS_NETWORK_GPS_INFO + " = gps." + GPS_INFO_ID +
+			  "  WHERE wn." + WIRELESS_NETWORK_BSSID + " = wn_sub." + WIRELESS_NETWORK_BSSID +
+			  "  ORDER BY snr." + SNR_INFO_MAX_SIGNAL_DBM + " DESC, " +
+			  "	gps." + GPS_INFO_PEAK_LON + " DESC, " +
+			  "	gps." + GPS_INFO_AVERAGE_LON + " DESC, " +
+			  "	gps." + GPS_INFO_MAX_LON + " DESC, " +
+			  "	gps." + GPS_INFO_MIN_LON + " DESC " +
+			  "  LIMIT 1" +
+			  ")",
+		nativeQuery = true)
+	List<WirelessNetwork> findBestWirelessNetworkByESSID(String essid);
 }
