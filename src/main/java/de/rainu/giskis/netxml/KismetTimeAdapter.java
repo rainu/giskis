@@ -13,6 +13,15 @@ public class KismetTimeAdapter extends XmlAdapter<String, LocalDateTime> {
 
 	@Override
 	public LocalDateTime unmarshal(String s) throws Exception {
+		s = s.replace("  1 ", " 01 ")
+			  .replace("  2 ", " 02 ")
+			  .replace("  3 ", " 03 ")
+			  .replace("  4 ", " 04 ")
+			  .replace("  5 ", " 05 ")
+			  .replace("  6 ", " 06 ")
+			  .replace("  7 ", " 07 ")
+			  .replace("  8 ", " 08 ")
+			  .replace("  9 ", " 09 ");
 		return LocalDateTime.parse(s, FORMAT);
 	}
 
