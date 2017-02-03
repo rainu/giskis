@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * This {@link FileConsumer} is responsible for generating a merged kml file only with named wifis.
@@ -42,20 +43,22 @@ public class ESSIDExporter implements FileConsumer {
 	@Override
 	public void accept(Path path) {
 		try {
-			final String essid = Files.readAllLines(path).stream().findFirst().orElse(null);
-			if(essid == null) {
+			final List<String> listEssid = Files.readAllLines(path);
+			if(listEssid == null || listEssid.isEmpty()) {
 				LOG.error("No essid given!");
 				return;
 			}
 
-			final DetectionRun run = merger.buildDetectionRun(() -> networkRepository.findBestWirelessNetworkByESSID(essid));
-			run.setKismetVersion(essid);
+			for(String essid : listEssid) {
+				final DetectionRun run = merger.buildDetectionRun(() -> networkRepository.findBestWirelessNetworkByESSID(essid));
+				run.setKismetVersion(essid);
 
-			final File targetFile = new File(outputDir, String.format("%s-%s.kml", essid, LocalDateTime.now().format(DateTimeFormatter.ISO_DATE)));
-			LOG.info("Generate KML: " + targetFile);
+				final File targetFile = new File(outputDir, String.format("%s-%s.kml", essid, LocalDateTime.now().format(DateTimeFormatter.ISO_DATE)));
+				LOG.info("Generate KML: " + targetFile);
 
-			final KMLExporter kmlExporter = new KMLExporter(run);
-			kmlExporter.generateKML().marshal(targetFile);
+				final KMLExporter kmlExporter = new KMLExporter(run);
+				kmlExporter.generateKML().marshal(targetFile);
+			}
 		} catch (IOException e) {
 			LOG.error("IO-Error: " + e.getMessage(), e);
 		}
