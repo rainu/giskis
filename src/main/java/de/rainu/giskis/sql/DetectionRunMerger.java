@@ -90,16 +90,20 @@ public class DetectionRunMerger {
 		clients.stream().skip(1L).forEach(curClient -> {
 			client.setMaxSeenRate(Math.max(client.getMaxSeenRate(), curClient.getMaxSeenRate()));
 
-			if(client.getFirstTime() == null) {
-				client.setFirstTime(curClient.getFirstTime());
-			}else {
-				client.setFirstTime(client.getFirstTime().isBefore(curClient.getFirstTime()) ? client.getFirstTime() : curClient.getFirstTime());
+			if(curClient.getFirstTime() != null){
+				if(client.getFirstTime() == null){
+					client.setFirstTime(curClient.getFirstTime());
+				} else {
+					client.setFirstTime(client.getFirstTime().isBefore(curClient.getFirstTime()) ? client.getFirstTime() : curClient.getFirstTime());
+				}
 			}
 
-			if(client.getLastTime() == null) {
-				client.setLastTime(curClient.getLastTime());
-			}else {
-				client.setLastTime(client.getLastTime().isAfter(curClient.getLastTime()) ? client.getLastTime() : curClient.getLastTime());
+			if(curClient.getLastTime() != null) {
+				if(client.getLastTime() == null) {
+					client.setLastTime(curClient.getLastTime());
+				} else {
+					client.setLastTime(client.getLastTime().isAfter(curClient.getLastTime()) ? client.getLastTime() : curClient.getLastTime());
+				}
 			}
 
 			client.setIPAddress(client.getIPAddress().isEmpty() ? curClient.getIPAddress() : client.getIPAddress());
