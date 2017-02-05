@@ -23,11 +23,11 @@ public class DetectionRunMerger {
 	@Autowired
 	private WirelessClientRepository clientRepository;
 
-	public DetectionRun buildFullDetectionRun(){
+	public DetectionRun buildFullDetectionRun() {
 		return buildDetectionRun(() ->
-			networkRepository.findBestWirelessNetworkIds().parallelStream()
-					  .map(id -> networkRepository.findOne(id))
-					  .collect(Collectors.toList())
+				  networkRepository.findBestWirelessNetworkIds().parallelStream()
+							 .map(id -> networkRepository.findOne(id))
+							 .collect(Collectors.toList())
 		);
 	}
 
@@ -41,7 +41,7 @@ public class DetectionRunMerger {
 
 		for (int i = 0; i < networks.size(); i++) {
 			final WirelessNetwork network = networks.get(i);
-			List<WirelessClient> clients =  clientRepository.findRealClientIdsForNetworkBssid(network.getBSSID()).parallelStream()
+			List<WirelessClient> clients = clientRepository.findRealClientIdsForNetworkBssid(network.getBSSID()).parallelStream()
 					  .map(id -> clientRepository.findOne(id))
 					  .collect(Collectors.toList());
 			clients = mergeAllClients(clients);
@@ -60,7 +60,7 @@ public class DetectionRunMerger {
 		Map<String, List<WirelessClient>> macMap = new HashMap<>();
 
 		for (WirelessClient client : clients) {
-			if(!macMap.containsKey(client.getMac())){
+			if (!macMap.containsKey(client.getMac())) {
 				macMap.put(client.getMac(), new ArrayList<>());
 			}
 
@@ -72,14 +72,14 @@ public class DetectionRunMerger {
 				  .collect(Collectors.toList());
 	}
 
-	private WirelessClient mergeClients(Collection<WirelessClient> clients){
+	private WirelessClient mergeClients(Collection<WirelessClient> clients) {
 		final WirelessClient client = clients.stream().findFirst().get();
 
-		if(clients.size() == 1) {
+		if (clients.size() == 1) {
 			return client;
 		}
 
-		if(client.getTag() == null) {
+		if (client.getTag() == null) {
 			client.setTag(new ArrayList<>());
 		}
 		Tag tag = new Tag();
@@ -89,8 +89,19 @@ public class DetectionRunMerger {
 
 		clients.stream().skip(1L).forEach(curClient -> {
 			client.setMaxSeenRate(Math.max(client.getMaxSeenRate(), curClient.getMaxSeenRate()));
-			client.setFirstTime(client.getFirstTime().isBefore(curClient.getFirstTime()) ? client.getFirstTime() : curClient.getFirstTime());
-			client.setLastTime(client.getLastTime().isAfter(curClient.getLastTime()) ? client.getLastTime() : curClient.getLastTime());
+
+			if(client.getFirstTime() == null) {
+				client.setFirstTime(curClient.getFirstTime());
+			}else {
+				client.setFirstTime(client.getFirstTime().isBefore(curClient.getFirstTime()) ? client.getFirstTime() : curClient.getFirstTime());
+			}
+
+			if(client.getLastTime() == null) {
+				client.setLastTime(curClient.getLastTime());
+			}else {
+				client.setLastTime(client.getLastTime().isAfter(curClient.getLastTime()) ? client.getLastTime() : curClient.getLastTime());
+			}
+
 			client.setIPAddress(client.getIPAddress().isEmpty() ? curClient.getIPAddress() : client.getIPAddress());
 			client.setGPSInfo(client.getGPSInfo().isEmpty() ? curClient.getGPSInfo() : client.getGPSInfo());
 			client.setSSID(client.getSSID().isEmpty() ? curClient.getSSID() : client.getSSID());
