@@ -29,7 +29,8 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 @Entity(name = DatabaseConstants.WIRELESS_CLIENT)
 @Access(AccessType.FIELD)
 @Table(indexes = {
-		  @Index(columnList = DatabaseConstants.WIRELESS_CLIENT_MAC)
+		  @Index(columnList = DatabaseConstants.WIRELESS_CLIENT_MAC),
+		  @Index(columnList = DatabaseConstants.WIRELESS_CLIENT_NETWORK_REF),
 })
 public class WirelessClient implements DatabaseConstants {
 	static final WirelessClient EMPTY = new WirelessClient();

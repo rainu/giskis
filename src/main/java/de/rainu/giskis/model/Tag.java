@@ -20,6 +20,10 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @Entity(name = DatabaseConstants.TAG)
 @Access(AccessType.FIELD)
+@Table(indexes = {
+		  @Index(columnList = DatabaseConstants.TAG_CLIENT_REF),
+		  @Index(columnList = DatabaseConstants.TAG_NETWORK_REF),
+})
 public class Tag implements DatabaseConstants {
 	static final Tag EMPTY = new Tag();
 
