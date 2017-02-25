@@ -1,5 +1,5 @@
 # giskis
-GisKis stores the information from kismet in a database so that the user can generate graphs using SQL.
+GisKis stores the information from kismet in a mongodb.
 
 # How to build
 
