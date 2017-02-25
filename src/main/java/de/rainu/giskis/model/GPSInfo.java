@@ -3,11 +3,11 @@ package de.rainu.giskis.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.rainu.giskis.sql.DatabaseConstants;
+import de.rainu.giskis.nosql.DatabaseConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.*;
-
 import java.math.BigInteger;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -18,73 +18,68 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE, isGetterVisibility = NONE)
-
-@Entity(name = DatabaseConstants.GPS_INFO)
-@Access(AccessType.FIELD)
 public class GPSInfo implements DatabaseConstants {
 	static final GPSInfo EMPTY = new GPSInfo();
 
 	@XmlTransient
 	@JsonIgnore
 	@Id
-	@GeneratedValue
-	@Column(name = GPS_INFO_ID)
 	private BigInteger id;
 
 	@XmlElement(name = "min-lat")
-	@Column(name = GPS_INFO_MIN_LAT)
+	@Field(GPS_INFO_MIN_LAT)
 	private Double minLat;
 
 	@XmlElement(name = "min-lon")
-	@Column(name = GPS_INFO_MIN_LON)
+	@Field(GPS_INFO_MIN_LON)
 	private Double minLon;
 
 	@XmlElement(name = "min-alt")
-	@Column(name = GPS_INFO_MIN_ALT)
+	@Field(GPS_INFO_MIN_ALT)
 	private Double minAlt;
 
 	@XmlElement(name = "min-spd")
-	@Column(name = GPS_INFO_MIN_SPD)
+	@Field(GPS_INFO_MIN_SPD)
 	private Double minSpd;
 
 	@XmlElement(name = "max-lat")
-	@Column(name = GPS_INFO_MAX_LAT)
+	@Field(GPS_INFO_MAX_LAT)
 	private Double maxLat;
 
 	@XmlElement(name = "max-lon")
-	@Column(name = GPS_INFO_MAX_LON)
+	@Field(GPS_INFO_MAX_LON)
 	private Double maxLon;
 
 	@XmlElement(name = "max-alt")
-	@Column(name = GPS_INFO_MAX_ALT)
+	@Field(GPS_INFO_MAX_ALT)
 	private Double maxAlt;
 
 	@XmlElement(name = "max-spd")
-	@Column(name = GPS_INFO_MAX_SPD)
+	@Field(GPS_INFO_MAX_SPD)
 	private Double maxSpd;
 
 	@XmlElement(name = "peak-lat")
-	@Column(name = GPS_INFO_PEAK_LAT)
+	@Field(GPS_INFO_PEAK_LAT)
 	private Double peakLat;
 
 	@XmlElement(name = "peak-lon")
-	@Column(name = GPS_INFO_PEAK_LON)
+	@Field(GPS_INFO_PEAK_LON)
 	private Double peakLon;
 
 	@XmlElement(name = "peak-alt")
-	@Column(name = GPS_INFO_PEAK_ALT)
+	@Field(GPS_INFO_PEAK_ALT)
 	private Double peakAlt;
 
 	@XmlElement(name = "avg-lat")
-	@Column(name = GPS_INFO_AVERAGE_LAT)
+	@Field(GPS_INFO_AVERAGE_LAT)
 	private Double averageLat;
 
 	@XmlElement(name = "avg-lon")
-	@Column(name = GPS_INFO_AVERAGE_LON)
+	@Field(GPS_INFO_AVERAGE_LON)
 	private Double averageLon;
 
 	@XmlElement(name = "avg-alt")
-	@Column(name = GPS_INFO_AVERAGE_ALT)
+	@Field(GPS_INFO_AVERAGE_ALT)
 	private Double averageAlt;
 
 	public BigInteger getId() {

@@ -3,11 +3,11 @@ package de.rainu.giskis.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.rainu.giskis.sql.DatabaseConstants;
+import de.rainu.giskis.nosql.DatabaseConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.*;
-
 import java.math.BigInteger;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -18,65 +18,60 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE, isGetterVisibility = NONE)
-
-@Entity(name = DatabaseConstants.SNR_INFO)
-@Access(AccessType.FIELD)
 public class SNRInfo implements DatabaseConstants {
 	static final SNRInfo EMPTY = new SNRInfo();
 
 	@XmlTransient
 	@JsonIgnore
 	@Id
-	@GeneratedValue
-	@Column(name = SNR_INFO_ID)
 	private BigInteger id;
 
 	@XmlElement(name = "last_signal_dbm")
-	@Column(name = SNR_INFO_LAST_SIGNAL_DBM)
+	@Field(SNR_INFO_LAST_SIGNAL_DBM)
 	private Integer lastSignalDbm;
 
 	@XmlElement(name = "last_noise_dbm")
-	@Column(name = SNR_INFO_LAST_NOISE_DBM)
+	@Field(SNR_INFO_LAST_NOISE_DBM)
 	private Integer lastNoiseDbm;
 
 	@XmlElement(name = "last_signal_rssi")
-	@Column(name = SNR_INFO_LAST_SIGNAL_RSSI)
+	@Field(SNR_INFO_LAST_SIGNAL_RSSI)
 	private Integer lastSignalRssi;
 
 	@XmlElement(name = "last_noise_rssi")
-	@Column(name = SNR_INFO_LAST_NOISE_RSSI)
+	@Field(SNR_INFO_LAST_NOISE_RSSI)
 	private Integer lastNoiseRssi;
 
 	@XmlElement(name = "min_signal_dbm")
-	@Column(name = SNR_INFO_MIN_SIGNAL_DBM)
+	@Field(SNR_INFO_MIN_SIGNAL_DBM)
 	private Integer minSignalDbm;
 
 	@XmlElement(name = "min_noise_dbm")
-	@Column(name = SNR_INFO_MIN_NOISE_DBM)
+	@Field(SNR_INFO_MIN_NOISE_DBM)
 	private Integer minNoiseDbm;
 
 	@XmlElement(name = "min_signal_rssi")
-	@Column(name = SNR_INFO_MIN_SIGNAL_RSSI)
+	@Field(SNR_INFO_MIN_SIGNAL_RSSI)
 	private Integer minSignalRssi;
 
 	@XmlElement(name = "min_noise_rssi")
-	@Column(name = SNR_INFO_MIN_NOISE_RSSI)
+	@Field(SNR_INFO_MIN_NOISE_RSSI)
 	private Integer minNoiseRssi;
 
 	@XmlElement(name = "max_signal_dbm")
-	@Column(name = SNR_INFO_MAX_SIGNAL_DBM)
+	@Field(SNR_INFO_MAX_SIGNAL_DBM)
 	private Integer maxSignalDbm;
 
 	@XmlElement(name = "max_noise_dbm")
-	@Column(name = SNR_INFO_MAX_NOISE_DBM)
+	@Field(SNR_INFO_MAX_NOISE_DBM)
 	private Integer maxNoiseDbm;
 
 	@XmlElement(name = "max_signal_rssi")
-	@Column(name = SNR_INFO_MAX_SIGNAL_RSSI)
+	@Field(SNR_INFO_MAX_SIGNAL_RSSI)
 	private Integer maxSignalRssi;
 
 	@XmlElement(name = "max_noise_rssi")
-	@Column(name = SNR_INFO_MAX_NOISE_RSSI)
+	@Field(SNR_INFO_MAX_NOISE_RSSI)
 	private Integer maxNoiseRssi;
 
 	public BigInteger getId() {

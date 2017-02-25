@@ -21,14 +21,14 @@ waitFor() {
     done
 }
 
-waitForPostgres() {
-    waitFor "echo $PG_PASSWORD | psql -h \"$PG_HOST\" -p $PG_PORT -U \"$PG_USER\" -c '\l'"
+waitForMongo() {
+    waitFor "curl http://$MONGO_HOST:$MONGO_PORT"
 }
 
 ###
 # MAIN
 ###
 
-waitForPostgres
+waitForMongo
 
 java -jar /giskis.jar

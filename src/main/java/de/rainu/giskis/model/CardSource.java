@@ -3,11 +3,11 @@ package de.rainu.giskis.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.rainu.giskis.sql.DatabaseConstants;
+import de.rainu.giskis.nosql.DatabaseConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.*;
-
 import java.math.BigInteger;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -18,52 +18,44 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE, isGetterVisibility = NONE)
-
-@Entity(name = DatabaseConstants.CARD_SOURCE)
-@Access(AccessType.FIELD)
-@Table(indexes = {
-		  @Index(columnList = DatabaseConstants.CARD_SOURCE_UUID)
-})
 public class CardSource implements DatabaseConstants {
 	static final CardSource EMPTY = new CardSource();
 
 	@XmlTransient
 	@JsonIgnore
 	@Id
-	@GeneratedValue
-	@Column(name = CARD_SOURCE_ID)
 	private BigInteger id;
 
 	@XmlAttribute(name = "uuid")
-	@Column(name = CARD_SOURCE_UUID)
+	@Field(CARD_SOURCE_UUID)
 	private String uuid;
 
 	@XmlElement(name = "card-source")
-	@Column(name = CARD_SOURCE_SOURCE)
+	@Field(CARD_SOURCE_SOURCE)
 	private String source;
 
 	@XmlElement(name = "card-name")
-	@Column(name = CARD_SOURCE_NAME)
+	@Field(CARD_SOURCE_NAME)
 	private String name;
 
 	@XmlElement(name = "card-interface")
-	@Column(name = CARD_SOURCE_INTERFACE)
+	@Field(CARD_SOURCE_INTERFACE)
 	private String interf;
 
 	@XmlElement(name = "card-type")
-	@Column(name = CARD_SOURCE_TYPE)
+	@Field(CARD_SOURCE_TYPE)
 	private String type;
 
 	@XmlElement(name = "card-packets")
-	@Column(name = CARD_SOURCE_PACKETS)
+	@Field(CARD_SOURCE_PACKETS)
 	private Integer packets;
 
 	@XmlElement(name = "card-hop")
-	@Column(name = CARD_SOURCE_HOP)
+	@Field(CARD_SOURCE_HOP)
 	private Boolean hop;
 
 	@XmlElement(name = "card-channels")
-	@Column(name = CARD_SOURCE_CHANNELS)
+	@Field(CARD_SOURCE_CHANNELS)
 	private String channels;
 
 	public BigInteger getId() {

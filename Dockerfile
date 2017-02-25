@@ -1,7 +1,7 @@
 FROM openjdk:8-jre-alpine
 MAINTAINER rainu <rainu@raysha.de>
 
-RUN apk add --update bash postgresql-client &&\
+RUN apk add --update bash curl &&\
  rm -rf /var/cache/apk/*
 
 COPY docker/wait_and_start.sh /giskis.sh

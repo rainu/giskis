@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.rainu.giskis.netxml.KismetTimeAdapter;
-import de.rainu.giskis.sql.DatabaseConstants;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import de.rainu.giskis.nosql.DatabaseConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.math.BigInteger;
@@ -25,92 +24,82 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE, isGetterVisibility = NONE)
-
-@Entity(name = DatabaseConstants.SSID)
-@Access(AccessType.FIELD)
 public class SSID implements DatabaseConstants {
 	static final SSID EMPTY = new SSID();
 
 	@XmlTransient
 	@JsonIgnore
 	@Id
-	@GeneratedValue
-	@Column(name = SSID_ID)
 	private BigInteger id;
 
 	@XmlAttribute(name = "first-time")
 	@XmlJavaTypeAdapter(KismetTimeAdapter.class)
-	@Column(name = SSID_FISRT_TIME)
+	@Field(SSID_FISRT_TIME)
 	private LocalDateTime firstTime;
 
 	@XmlAttribute(name = "last-time")
 	@XmlJavaTypeAdapter(KismetTimeAdapter.class)
-	@Column(name = SSID_LAST_TIME)
+	@Field(SSID_LAST_TIME)
 	private LocalDateTime lastTime;
 
 	@XmlElement(name = "type")
-	@Column(name = SSID_TYPE)
+	@Field(SSID_TYPE)
 	private String type;
 
 	@XmlElement(name = "max-rate")
-	@Column(name = SSID_MAX_RATE)
+	@Field(SSID_MAX_RATE)
 	private Double maxRate;
 
 	@XmlElement(name = "packets")
-	@Column(name = SSID_PACKETS)
+	@Field(SSID_PACKETS)
 	private Integer packet;
 
 	@XmlElement(name = "beaconrate")
-	@Column(name = SSID_BEACONRATE)
+	@Field(SSID_BEACONRATE)
 	private Integer beaconrate;
 
 	@XmlElement(name = "wps")
-	@Column(name = SSID_WPS)
+	@Field(SSID_WPS)
 	private String wps;
 
 	@XmlElement(name = "wps-manuf")
-	@Column(name = SSID_WPS_MANUF)
+	@Field(SSID_WPS_MANUF)
 	private String WPSManu;
 
 	@XmlElement(name = "dev-name")
-	@Column(name = SSID_DEV_NAME)
+	@Field(SSID_DEV_NAME)
 	private String devName;
 
 	@XmlElement(name = "model-name")
-	@Column(name = SSID_MODEL_NAME)
+	@Field(SSID_MODEL_NAME)
 	private String modelName;
 
 	@XmlElement(name = "model-num")
-	@Column(name = SSID_MODEL_NUMBER)
+	@Field(SSID_MODEL_NUMBER)
 	private String modelNumber;
 
 	@XmlElement(name = "wpa-version")
-	@Column(name = SSID_WPA_VERSION)
+	@Field(SSID_WPA_VERSION)
 	private String wpaVersion;
 
 	@XmlElement(name = "encryption")
-	@ElementCollection(fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SELECT)
+	@Field(SSID_ENCRYPTIONS)
 	private List<String> encryption = new ArrayList<>();
 
 	@XmlElement(name = "dot11d")
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = SSID_DOT11D)
-	@Fetch(FetchMode.SELECT)
+	@Field(DOT11D)
 	private Dot11d Dot11d;
 
 	@XmlElement(name = "ssid")
-	@Column(name = SSID_SSID)
+	@Field(SSID_SSID)
 	private String SSID;
 
 	@XmlElement(name = "info")
-	@Column(name = SSID_INFO)
+	@Field(SSID_INFO)
 	private String info;
 
 	@XmlElement(name = "essid")
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = SSID_ESSID)
-	@Fetch(FetchMode.SELECT)
+	@Field(DatabaseConstants.ESSID)
 	private ESSID ESSID;
 
 	public BigInteger getId() {

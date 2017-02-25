@@ -3,11 +3,12 @@ package de.rainu.giskis.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.rainu.giskis.sql.DatabaseConstants;
+import de.rainu.giskis.nosql.DatabaseConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.*;
-
 import java.math.BigInteger;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -17,28 +18,21 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE, isGetterVisibility = NONE)
-
-@Entity(name = DatabaseConstants.ESSID)
-@Access(AccessType.FIELD)
-@Table(indexes = {
-		  @Index(columnList = DatabaseConstants.ESSID_ESSID)
-})
 public class ESSID implements DatabaseConstants {
 	static final ESSID EMPTY = new ESSID();
 
 	@XmlTransient
 	@JsonIgnore
 	@Id
-	@GeneratedValue
-	@Column(name = ESSID_ID)
 	private BigInteger id;
 
 	@XmlValue
-	@Column(name = ESSID_ESSID)
+	@Field(ESSID_ESSID)
+	@Indexed
 	private String essid;
 
 	@XmlAttribute(name = "cloaked")
-	@Column(name = ESSID_ESSID_CLOAKED)
+	@Field(ESSID_ESSID_CLOAKED)
 	private Boolean cloaked;
 
 	public BigInteger getId() {

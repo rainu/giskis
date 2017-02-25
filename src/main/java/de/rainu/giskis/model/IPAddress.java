@@ -3,11 +3,11 @@ package de.rainu.giskis.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.rainu.giskis.sql.DatabaseConstants;
+import de.rainu.giskis.nosql.DatabaseConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.*;
-
 import java.math.BigInteger;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -18,33 +18,28 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE, isGetterVisibility = NONE)
-
-@Entity(name = DatabaseConstants.IP_ADDRESS)
-@Access(AccessType.FIELD)
 public class IPAddress implements DatabaseConstants {
 	static final IPAddress EMPTY = new IPAddress();
 
 	@XmlTransient
 	@JsonIgnore
 	@Id
-	@GeneratedValue
-	@Column(name = IP_ADDRESS_ID)
 	private BigInteger id;
 
 	@XmlAttribute(name = "type")
-	@Column(name = IP_ADDRESS_TYPE)
+	@Field(IP_ADDRESS_TYPE)
 	private String type;
 
 	@XmlElement(name = "ip-block")
-	@Column(name = IP_ADDRESS_BLOCK)
+	@Field(IP_ADDRESS_BLOCK)
 	private String block;
 
 	@XmlElement(name = "ip-netmask")
-	@Column(name = IP_ADDRESS_NETMASK)
+	@Field(IP_ADDRESS_NETMASK)
 	private String netmask;
 
 	@XmlElement(name = "ip-gateway")
-	@Column(name = IP_ADDRESS_GATEWAY)
+	@Field(IP_ADDRESS_GATEWAY)
 	private String gateway;
 
 	public BigInteger getId() {

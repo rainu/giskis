@@ -2,7 +2,7 @@ package de.rainu.giskis.consumer;
 
 import de.rainu.giskis.kml.KMLExporter;
 import de.rainu.giskis.model.DetectionRun;
-import de.rainu.giskis.sql.DetectionRunMerger;
+import de.rainu.giskis.nosql.DetectionRunMerger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

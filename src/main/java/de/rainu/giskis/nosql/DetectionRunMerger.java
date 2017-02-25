@@ -1,4 +1,4 @@
-package de.rainu.giskis.sql;
+package de.rainu.giskis.nosql;
 
 import de.rainu.giskis.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +18,13 @@ public class DetectionRunMerger {
 	private DetectionRunRepository detectionRepository;
 
 	@Autowired
-	private WirelessNetworkRepository networkRepository;
+	private WirelessNetworkDao networkDao;
 
 	@Autowired
-	private WirelessClientRepository clientRepository;
+	private WirelessClientDao clientDao;
 
 	public DetectionRun buildFullDetectionRun() {
-		return buildDetectionRun(() ->
-				  networkRepository.findBestWirelessNetworkIds().parallelStream()
-							 .map(id -> networkRepository.findOne(id))
-							 .collect(Collectors.toList())
-		);
+		return buildDetectionRun(() -> networkDao.findBestWirelessNetworks());
 	}
 
 	public DetectionRun buildDetectionRun(Supplier<List<WirelessNetwork>> networkSupplier) {
@@ -41,9 +37,7 @@ public class DetectionRunMerger {
 
 		for (int i = 0; i < networks.size(); i++) {
 			final WirelessNetwork network = networks.get(i);
-			List<WirelessClient> clients = clientRepository.findRealClientIdsForNetworkBssid(network.getBSSID()).parallelStream()
-					  .map(id -> clientRepository.findOne(id))
-					  .collect(Collectors.toList());
+			List<WirelessClient> clients = clientDao.findRealClientsForNetworkBssid(network.getBSSID());
 			clients = mergeAllClients(clients);
 
 			//repair numbers

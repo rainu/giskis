@@ -3,11 +3,11 @@ package de.rainu.giskis.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.rainu.giskis.sql.DatabaseConstants;
+import de.rainu.giskis.nosql.DatabaseConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.*;
-
 import java.math.BigInteger;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -17,29 +17,20 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE, isGetterVisibility = NONE)
-
-@Entity(name = DatabaseConstants.TAG)
-@Access(AccessType.FIELD)
-@Table(indexes = {
-		  @Index(columnList = DatabaseConstants.TAG_CLIENT_REF),
-		  @Index(columnList = DatabaseConstants.TAG_NETWORK_REF),
-})
 public class Tag implements DatabaseConstants {
 	static final Tag EMPTY = new Tag();
 
 	@XmlTransient
 	@JsonIgnore
 	@Id
-	@GeneratedValue
-	@Column(name = TAG_ID)
 	private BigInteger id;
 
 	@XmlValue
-	@Column(name = TAG_VALUE)
+	@Field(TAG_VALUE)
 	private String value;
 
 	@XmlAttribute(name = "name")
-	@Column(name = TAG_NAME)
+	@Field(TAG_NAME)
 	private String name;
 
 	public BigInteger getId() {

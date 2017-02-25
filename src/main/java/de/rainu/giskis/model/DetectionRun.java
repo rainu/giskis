@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.rainu.giskis.netxml.KismetTimeAdapter;
-import de.rainu.giskis.sql.DatabaseConstants;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import de.rainu.giskis.nosql.DatabaseConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.math.BigInteger;
@@ -25,38 +26,31 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE, isGetterVisibility = NONE)
-
-@Entity(name = DatabaseConstants.DETECTION_RUN)
-@Access(AccessType.FIELD)
+@Document(collection = DatabaseConstants.DETECTION_RUN)
 public class DetectionRun implements DatabaseConstants {
 	static final DetectionRun EMPTY = new DetectionRun();
 
 	@XmlTransient
 	@JsonIgnore
 	@Id
-	@GeneratedValue
-	@Column(name = DETECTION_RUN_ID)
 	private BigInteger id;
 
 	@XmlAttribute(name = "kismet-version")
-	@Column(name = DETECTION_RUN_VERSION)
+	@Field(DETECTION_RUN_VERSION)
 	private String kismetVersion;
 
 	@XmlAttribute(name = "start-time")
 	@XmlJavaTypeAdapter(KismetTimeAdapter.class)
-	@Column(name = DETECTION_RUN_START)
+	@Field(DETECTION_RUN_START)
 	private LocalDateTime time;
 
 	@XmlElement(name = "card-source")
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = DETECTION_RUN_CARD_SOURCE)
-	@Fetch(FetchMode.SELECT)
+	@Field(CARD_SOURCE)
 	private CardSource cardSource;
 
 	@XmlElement(name = "wireless-network")
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = WIRELESS_NETWORK_DETECTION_RUN)
-	@Fetch(FetchMode.SELECT)
+	@DBRef
+	@Field(WIRELESS_NETWORK)
 	private List<WirelessNetwork> wirelessNetworks = new ArrayList<>();
 
 	public BigInteger getId() {

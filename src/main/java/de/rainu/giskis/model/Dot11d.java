@@ -3,11 +3,10 @@ package de.rainu.giskis.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.rainu.giskis.sql.DatabaseConstants;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import de.rainu.giskis.nosql.DatabaseConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -21,27 +20,20 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE, isGetterVisibility = NONE)
-
-@Entity(name = DatabaseConstants.DOT11D)
-@Access(AccessType.FIELD)
 public class Dot11d implements DatabaseConstants {
 	static final Dot11d EMPTY = new Dot11d();
 
 	@XmlTransient
 	@JsonIgnore
 	@Id
-	@GeneratedValue
-	@Column(name = DOT11D_ID)
 	private BigInteger id;
 
 	@XmlAttribute(name = "country")
-	@Column(name = DOT11D_COUNTRY)
+	@Field(DOT11D_COUNTRY)
 	private String country;
 
 	@XmlElement(name = "dot11d-range")
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = DOT11D_RANGE_DOT11D)
-	@Fetch(FetchMode.SELECT)
+	@Field(DOT11D_RANGE)
 	private List<Dot11dRange> ranges = new ArrayList<>();
 
 	public BigInteger getId() {

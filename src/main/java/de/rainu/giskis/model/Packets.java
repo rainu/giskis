@@ -3,11 +3,11 @@ package de.rainu.giskis.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.rainu.giskis.sql.DatabaseConstants;
+import de.rainu.giskis.nosql.DatabaseConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.*;
-
 import java.math.BigInteger;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -18,41 +18,36 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE, isGetterVisibility = NONE)
-
-@Entity(name = DatabaseConstants.PACKETS)
-@Access(AccessType.FIELD)
 public class Packets implements DatabaseConstants {
 	static final Packets EMPTY = new Packets();
 
 	@XmlTransient
 	@JsonIgnore
 	@Id
-	@GeneratedValue
-	@Column(name = PACKETS_ID)
 	private BigInteger id;
 
 	@XmlElement(name = "LLC")
-	@Column(name = PACKETS_LLC)
+	@Field(PACKETS_LLC)
 	private Integer LLC;
 
 	@XmlElement(name = "data")
-	@Column(name = PACKETS_DATA)
+	@Field(PACKETS_DATA)
 	private Integer data;
 
 	@XmlElement(name = "crypt")
-	@Column(name = PACKETS_CRYPT)
+	@Field(PACKETS_CRYPT)
 	private Integer crypt;
 
 	@XmlElement(name = "total")
-	@Column(name = PACKETS_TOTAL)
+	@Field(PACKETS_TOTAL)
 	private Integer total;
 
 	@XmlElement(name = "fragments")
-	@Column(name = PACKETS_FRAGMENTS)
+	@Field(PACKETS_FRAGMENTS)
 	private Integer fragments;
 
 	@XmlElement(name = "retries")
-	@Column(name = PACKETS_RETRIES)
+	@Field(PACKETS_RETRIES)
 	private Integer retries;
 
 	public BigInteger getId() {

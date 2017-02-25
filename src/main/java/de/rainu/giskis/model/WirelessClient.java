@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.rainu.giskis.netxml.KismetTimeAdapter;
-import de.rainu.giskis.sql.DatabaseConstants;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import de.rainu.giskis.nosql.DatabaseConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.math.BigInteger;
@@ -25,132 +25,107 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE, isGetterVisibility = NONE)
-
-@Entity(name = DatabaseConstants.WIRELESS_CLIENT)
-@Access(AccessType.FIELD)
-@Table(indexes = {
-		  @Index(columnList = DatabaseConstants.WIRELESS_CLIENT_MAC),
-		  @Index(columnList = DatabaseConstants.WIRELESS_CLIENT_NETWORK_REF),
-})
+@Document(collection = DatabaseConstants.WIRELESS_CLIENT)
 public class WirelessClient implements DatabaseConstants {
 	static final WirelessClient EMPTY = new WirelessClient();
 
 	@XmlTransient
 	@JsonIgnore
 	@Id
-	@GeneratedValue
-	@Column(name = WIRELESS_CLIENT_ID)
 	private BigInteger id;
 
 	@XmlAttribute(name = "number")
-	@Column(name = WIRELESS_CLIENT_NUMBER)
+	@Field(WIRELESS_CLIENT_NUMBER)
 	private Integer number;
 
 	@XmlAttribute(name = "type")
-	@Column(name = WIRELESS_CLIENT_TYPE)
+	@Field(WIRELESS_CLIENT_TYPE)
 	private String type;
 
 	@XmlAttribute(name = "first-time")
 	@XmlJavaTypeAdapter(KismetTimeAdapter.class)
-	@Column(name = WIRELESS_CLIENT_FIRST_TIME)
+	@Field(WIRELESS_CLIENT_FIRST_TIME)
 	private LocalDateTime firstTime;
 
 	@XmlAttribute(name = "last-time")
 	@XmlJavaTypeAdapter(KismetTimeAdapter.class)
-	@Column(name = WIRELESS_CLIENT_LAST_TIME)
+	@Field(WIRELESS_CLIENT_LAST_TIME)
 	private LocalDateTime lastTime;
 
 	@XmlElement(name = "client-mac")
-	@Column(name = WIRELESS_CLIENT_MAC)
+	@Field(WIRELESS_CLIENT_MAC)
 	private String mac;
 
 	@XmlElement(name = "client-manuf")
-	@Column(name = WIRELESS_CLIENT_MANUF)
+	@Field(WIRELESS_CLIENT_MANUF)
 	private String manuf;
 
 	@XmlElement(name = "SSID")
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = WIRELESS_CLIENT_SSID)
-	@Fetch(FetchMode.SELECT)
+	@Field(DatabaseConstants.SSID)
 	private SSID SSID;
 
 	@XmlElement(name = "channel")
-	@Column(name = WIRELESS_CLIENT_CHANNEL)
+	@Field(WIRELESS_CLIENT_CHANNEL)
 	private Integer channel;
 
 	@XmlElement(name = "freqmhz")
-	@ElementCollection(fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SELECT)
+	@Field(WIRELESS_CLIENT_FREQMHZ)
 	private List<String> freqMHZ = new ArrayList<>();
 
 	@XmlElement(name = "maxseenrate")
-	@Column(name = WIRELESS_CLIENT_MAX_SEEN_RATE)
+	@Field(WIRELESS_CLIENT_MAX_SEEN_RATE)
 	private Long maxSeenRate;
 
 	@XmlElement(name = "carrier")
-	@ElementCollection(fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SELECT)
+	@Field(WIRELESS_CLIENT_CARRIER)
 	private List<String> carrier = new ArrayList<>();
 
 	@XmlElement(name = "encoding")
-	@ElementCollection(fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SELECT)
+	@Field(WIRELESS_CLIENT_ENCODINGS)
 	private List<String> encoding = new ArrayList<>();
 
 	@XmlElement(name = "packets")
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = WIRELESS_CLIENT_PACKETS)
-	@Fetch(FetchMode.SELECT)
+	@Field(PACKETS)
 	private Packets packets;
 
 	@XmlElement(name = "datasize")
-	@Column(name = WIRELESS_CLIENT_DATASIZE)
+	@Field(WIRELESS_CLIENT_DATASIZE)
 	private Long datasize;
 
 	@XmlElement(name = "snr-info")
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = WIRELESS_CLIENT_SNR_INFO)
-	@Fetch(FetchMode.SELECT)
+	@Field(SNR_INFO)
 	private SNRInfo SNRInfo;
 
 	@XmlElement(name = "gps-info")
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = WIRELESS_CLIENT_GPS_INFO)
-	@Fetch(FetchMode.SELECT)
+	@Field(GPS_INFO)
 	private GPSInfo GPSInfo;
 
 	@XmlElement(name = "ip-address")
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = WIRELESS_CLIENT_IP_ADDRESS)
-	@Fetch(FetchMode.SELECT)
+	@Field(IP_ADDRESS)
 	private IPAddress IPAddress;
 
 	@XmlElement(name = "cdp-device")
-	@Column(name = WIRELESS_CLIENT_CDP_DEVICE)
+	@Field(WIRELESS_CLIENT_CDP_DEVICE)
 	private String CDPDevice;
 
 	@XmlElement(name = "cdp-portid")
-	@Column(name = WIRELESS_CLIENT_CDP_PORT_ID)
+	@Field(WIRELESS_CLIENT_CDP_PORT_ID)
 	private String CDPPortId;
 
 	@XmlElement(name = "dhcp-hostname")
-	@Column(name = WIRELESS_CLIENT_DHCP_HOSTNAME)
+	@Field(WIRELESS_CLIENT_DHCP_HOSTNAME)
 	private String DHCPHostname;
 
 	@XmlElement(name = "dhcp-vendor")
-	@Column(name = WIRELESS_CLIENT_DHCP_VENDOR)
+	@Field(WIRELESS_CLIENT_DHCP_VENDOR)
 	private String DHCPVendor;
 
 	@XmlElement(name = "seen-card")
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = WIRELESS_CLIENT_SEEN_CARD)
-	@Fetch(FetchMode.SELECT)
+	@Field(SEEN_CARD)
 	private SeenCard seenCard;
 
 	@XmlElement(name = "tag")
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = TAG_CLIENT_REF)
-	@Fetch(FetchMode.SELECT)
+	@Field(TAG)
 	private List<Tag> tag = new ArrayList<>();
 
 	public BigInteger getId() {

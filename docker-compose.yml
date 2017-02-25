@@ -1,20 +1,16 @@
 version: '2.1'
 services:
   db:
-    image: postgres:9-alpine
+    image: mongo
     container_name: giskis-db
-    environment:
-      - POSTGRES_PASSWORD=postgres
 
   giskis:
     image: rainu/giskis
     container_name: giskis
     environment:
-      - PG_HOST=db
-      - PG_PORT=5432
-      - PG_DATABASE=postgres
-      - PG_USER=postgres
-      - PG_PASSWORD=postgres
+      - MONGO_HOST=db
+      - MONGO_PORT=27017
+      - MONGO_URI=mongodb://db:27017/test
       - SCAN_DIR=/in
       - OUTPUT_DIR=/out
       - MIN_FLMT=10000

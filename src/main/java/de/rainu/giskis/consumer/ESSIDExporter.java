@@ -2,8 +2,9 @@ package de.rainu.giskis.consumer;
 
 import de.rainu.giskis.kml.KMLExporter;
 import de.rainu.giskis.model.DetectionRun;
-import de.rainu.giskis.sql.DetectionRunMerger;
-import de.rainu.giskis.sql.WirelessNetworkRepository;
+import de.rainu.giskis.nosql.DetectionRunMerger;
+import de.rainu.giskis.nosql.WirelessNetworkDao;
+import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ESSIDExporter implements FileConsumer {
 
 
 	@Autowired
-	private WirelessNetworkRepository networkRepository;
+	private WirelessNetworkDao wirelessNetworkDao;
 
 	@Autowired
 	private DetectionRunMerger merger;
@@ -50,7 +51,9 @@ public class ESSIDExporter implements FileConsumer {
 			}
 
 			for(String essid : listEssid) {
-				final DetectionRun run = merger.buildDetectionRun(() -> networkRepository.findBestWirelessNetworkByESSID(essid));
+				final DetectionRun run = merger.buildDetectionRun(() ->
+          Collections.singletonList(wirelessNetworkDao.findBestWirelessNetworkByESSID(essid))
+        );
 				run.setKismetVersion(essid);
 
 				final File targetFile = new File(outputDir, String.format("%s-%s.kml", essid, LocalDateTime.now().format(DateTimeFormatter.ISO_DATE)));
